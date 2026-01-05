@@ -38,7 +38,7 @@ const AppLayout: React.FC = () => (
       }
     />
     <Outlet />
-    <Layout.Footer>
+    <Layout.Footer hideLegalLinks={true}>
       <span>
         © {new Date().getFullYear()} {AppName}. Licensed under the{" "}
         <a
