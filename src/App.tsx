@@ -5,11 +5,12 @@ import { Routes, Route, Outlet, NavLink } from "react-router-dom";
 import Home from "./pages/Home";
 import Debugger from "./pages/Debugger.tsx";
 
+const AppName = "Important Diagrams";
 const AppLayout: React.FC = () => (
   <main>
     <Layout.Header
-      projectId="My App"
-      projectTitle="My App"
+      projectId={AppName}
+      projectTitle={AppName}
       contentRight={
         <>
           <nav>
@@ -37,9 +38,9 @@ const AppLayout: React.FC = () => (
       }
     />
     <Outlet />
-    <Layout.Footer>
+    <Layout.Footer hideLegalLinks={true}>
       <span>
-        © {new Date().getFullYear()} My App. Licensed under the{" "}
+        © {new Date().getFullYear()} {AppName}. Licensed under the{" "}
         <a
           href="http://www.apache.org/licenses/LICENSE-2.0"
           target="_blank"
