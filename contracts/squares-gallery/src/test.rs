@@ -30,3 +30,18 @@ fn test() {
     let last_nft_owner = nft_client.owner_of(&19u32);
     assert_eq!(&contract_id, &last_nft_owner);
 }
+
+#[test]
+fn test_gallery_address() {
+    let env = Env::default();
+    env.mock_all_auths();
+
+    let owner = Address::generate(&env);
+    let wasm_hash: BytesN<32> = env.deployer().upload_contract_wasm(WASM);
+
+    let contract_id = env.register(Contract, (owner, wasm_hash));
+    let client = ContractClient::new(&env, &contract_id);
+
+    let gallery_address = client.gallery_address();
+    assert_eq!(gallery_address, contract_id);
+}

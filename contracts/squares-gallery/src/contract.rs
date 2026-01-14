@@ -61,6 +61,10 @@ impl Contract {
             .expect("nft should be set")
     }
 
+    pub fn gallery_address(e: &Env) -> Address {
+        e.current_contract_address()
+    }
+
     pub fn initialize_collection(e: &Env) -> Address {
         let owner: Address = e
             .storage()
