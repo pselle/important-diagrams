@@ -23,3 +23,7 @@
   height: auto;
   border-radius: 4px;
 }
+
+.artCardInfo p {
+  text-align: center;
+}
