@@ -1,14 +1,14 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import squaresGallery from "../contracts/squares_gallery";
-import * as NftContract from "nft_sequential_minting_example";
+import { Client } from "nft_sequential_minting_example";
 import { rpcUrl, networkPassphrase } from "../contracts/util";
 
 // Create a single NFT client instance once we have the collection address
-let nftClient: NftContract.Client | null = null;
+let nftClient: Client | null = null;
 
-export const getNftClient = (collectionAddress: string): NftContract.Client => {
+export const getNftClient = (collectionAddress: string): Client => {
   if (!nftClient) {
-    nftClient = new NftContract.Client({
+    nftClient = new Client({
       networkPassphrase,
       contractId: collectionAddress,
       rpcUrl,
