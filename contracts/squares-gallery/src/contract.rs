@@ -6,7 +6,7 @@ use soroban_sdk::{
 use crate::nft::NftClient;
 
 const BASE_URI: &str =
-    "https://bafybeid5jq6nn6m5tflzz5van67m74rt26c2z3tvowusxgio2qzmtkx6ki.ipfs.w3s.link/";
+    "https://bafybeicqgwje7trm27thcwngfhtz2ppadly2zcnxp3ch6plt5fe4ipoacu.ipfs.w3s.link/";
 const NAME: &str = "Squares Gallery";
 const SYMBOL: &str = "SGAL";
 
