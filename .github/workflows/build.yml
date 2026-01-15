@@ -58,7 +58,6 @@ jobs:
           fi
       - run: npm run lint
       - run: npx prettier . --check
-      - run: ls packages/
       - run: npm run install:contracts
       - run: npm run build
       - name: Run tests
