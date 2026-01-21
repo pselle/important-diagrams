@@ -39,7 +39,6 @@ export const useGetCollectionAddress = (): UseQueryResult<string, Error> =>
       if (typeof transaction.result === "string") {
         return transaction.result;
       }
-      console.log(transaction);
       throw new Error("Failed to get collection address");
     },
     // staleTime: Infinity, // Never goes stale - collection address is immutable
