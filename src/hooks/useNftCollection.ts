@@ -5,6 +5,15 @@ import { rpcUrl, networkPassphrase } from "../contracts/util";
 
 // Create a single NFT client instance once we have the collection address
 let nftClient: Client | null = null;
+const COLLECTION_SYMBOL = "SSQ";
+
+const IPFS_GATEWAY = "https://ipfs.io/ipfs/";
+export function ipfsToHttp(ipfsUri: string): string {
+  if (ipfsUri.startsWith("ipfs://")) {
+    return IPFS_GATEWAY + ipfsUri.slice(7);
+  }
+  return ipfsUri;
+}
 
 export const getNftClient = (collectionAddress: string): Client => {
   if (!nftClient) {
@@ -25,11 +34,12 @@ export const useGetCollectionAddress = (): UseQueryResult<string, Error> =>
     queryKey: ["collectionAddress"],
     queryFn: async () => {
       const transaction = await squaresGallery.collection_address({
-        symbol: "SQG",
+        symbol: COLLECTION_SYMBOL,
       });
       if (typeof transaction.result === "string") {
         return transaction.result;
       }
+      console.log(transaction);
       throw new Error("Failed to get collection address");
     },
     // staleTime: Infinity, // Never goes stale - collection address is immutable
@@ -96,7 +106,7 @@ export const useGetTokenUri = (
       const client = getNftClient(collectionAddress);
       const transaction = await client.token_uri({ token_id: tokenId });
       if (typeof transaction.result === "string") {
-        return transaction.result;
+        return ipfsToHttp(transaction.result);
       }
       return null;
     },
