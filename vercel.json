@@ -1,0 +1,13 @@
+{
+  "buildCommand": "npm run build:staging",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "env": {
+    "STELLAR_SCAFFOLD_ENV": "staging"
+  },
+  "build": {
+    "env": {
+      "STELLAR_SCAFFOLD_ENV": "staging"
+    }
+  }
+}
