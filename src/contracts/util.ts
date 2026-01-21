@@ -15,34 +15,38 @@ type Network = {
 };
 
 const envSchema = z.object({
-  PUBLIC_STELLAR_NETWORK: z.enum([
+  VITE_STELLAR_NETWORK: z.enum([
     "PUBLIC",
     "FUTURENET",
     "TESTNET",
     "LOCAL",
     "STANDALONE", // deprecated in favor of LOCAL
   ] as const),
-  PUBLIC_STELLAR_NETWORK_PASSPHRASE: z.nativeEnum(WalletNetwork),
-  PUBLIC_STELLAR_RPC_URL: z.string(),
-  PUBLIC_STELLAR_HORIZON_URL: z.string(),
+  VITE_STELLAR_NETWORK_PASSPHRASE: z.nativeEnum(WalletNetwork),
+  VITE_STELLAR_RPC_URL: z.string(),
+  VITE_STELLAR_HORIZON_URL: z.string(),
 });
 
 const parsed = envSchema.safeParse(import.meta.env);
+console.log(import.meta.env);
+console.log(parsed);
 
 const env: z.infer<typeof envSchema> = parsed.success
   ? parsed.data
   : {
-      PUBLIC_STELLAR_NETWORK: "LOCAL",
-      PUBLIC_STELLAR_NETWORK_PASSPHRASE: WalletNetwork.STANDALONE,
-      PUBLIC_STELLAR_RPC_URL: "http://localhost:8000/rpc",
-      PUBLIC_STELLAR_HORIZON_URL: "http://localhost:8000",
+      VITE_STELLAR_NETWORK: "LOCAL",
+      VITE_STELLAR_NETWORK_PASSPHRASE: WalletNetwork.STANDALONE,
+      VITE_STELLAR_RPC_URL: "http://localhost:8000/rpc",
+      VITE_STELLAR_HORIZON_URL: "http://localhost:8000",
     };
 
+console.log(env);
+
 export const stellarNetwork =
-  env.PUBLIC_STELLAR_NETWORK === "STANDALONE"
+  env.VITE_STELLAR_NETWORK === "STANDALONE"
     ? "LOCAL"
-    : env.PUBLIC_STELLAR_NETWORK;
-export const networkPassphrase = env.PUBLIC_STELLAR_NETWORK_PASSPHRASE;
+    : env.VITE_STELLAR_NETWORK;
+export const networkPassphrase = env.VITE_STELLAR_NETWORK_PASSPHRASE;
 
 const stellarEncode = (str: string) => {
   return str.replace(/\//g, "//").replace(/;/g, "/;");
@@ -64,9 +68,10 @@ export const labPrefix = () => {
 };
 
 // NOTE: needs to be exported for contract files in this directory
-export const rpcUrl = env.PUBLIC_STELLAR_RPC_URL;
+export const rpcUrl = env.VITE_STELLAR_RPC_URL;
+console.log("Using RPC URL:", rpcUrl);
 
-export const horizonUrl = env.PUBLIC_STELLAR_HORIZON_URL;
+export const horizonUrl = env.VITE_STELLAR_HORIZON_URL;
 
 const networkToId = (network: string): NetworkType => {
   switch (network) {
