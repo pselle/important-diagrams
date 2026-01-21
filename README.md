@@ -20,9 +20,9 @@ Before getting started, make sure you’ve met the requirements listed in the [S
 
 TODO add details
 
-## Deploying
+## Deploying the project
 
-The project is deployed to Vercel as a static build. To deploy a staging (testnet) site:
+The project is deployed to Vercel as a static build. To deploy a staging (testnet) site from your local environment:
 
 ```
 npm run build:staging
