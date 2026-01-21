@@ -5,6 +5,15 @@ import { rpcUrl, networkPassphrase } from "../contracts/util";
 
 // Create a single NFT client instance once we have the collection address
 let nftClient: Client | null = null;
+const COLLECTION_SYMBOL = "SSQ";
+
+const IPFS_GATEWAY = "https://ipfs.io/ipfs/";
+export function ipfsToHttp(ipfsUri: string): string {
+  if (ipfsUri.startsWith("ipfs://")) {
+    return IPFS_GATEWAY + ipfsUri.slice(7);
+  }
+  return ipfsUri;
+}
 
 export const getNftClient = (collectionAddress: string): Client => {
   if (!nftClient) {
@@ -25,15 +34,15 @@ export const useGetCollectionAddress = (): UseQueryResult<string, Error> =>
     queryKey: ["collectionAddress"],
     queryFn: async () => {
       const transaction = await squaresGallery.collection_address({
-        symbol: "SQG",
+        symbol: COLLECTION_SYMBOL,
       });
       if (typeof transaction.result === "string") {
         return transaction.result;
       }
       throw new Error("Failed to get collection address");
     },
-    staleTime: Infinity, // Never goes stale - collection address is immutable
-    gcTime: Infinity, // Keep in memory forever
+    // staleTime: Infinity, // Never goes stale - collection address is immutable
+    // gcTime: Infinity, // Keep in memory forever
     enabled: true,
   });
 
@@ -47,8 +56,8 @@ export const useGetGalleryAddress = (): UseQueryResult<string, Error> =>
       }
       throw new Error("Failed to get gallery address");
     },
-    staleTime: Infinity, // Never goes stale - gallery address is immutable
-    gcTime: Infinity, // Keep in memory forever
+    // staleTime: Infinity, // Never goes stale - gallery address is immutable
+    // gcTime: Infinity, // Keep in memory forever
     enabled: true,
   });
 
@@ -77,8 +86,8 @@ export const useGetOwner = (
       return "Token not minted";
     },
     enabled: !!collectionAddress && !!galleryAddress,
-    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
-    gcTime: 1000 * 60 * 30, // Keep in memory for 30 minutes
+    // staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+    // gcTime: 1000 * 60 * 30, // Keep in memory for 30 minutes
   });
 
 // Hook to get token URI for metadata
@@ -96,11 +105,11 @@ export const useGetTokenUri = (
       const client = getNftClient(collectionAddress);
       const transaction = await client.token_uri({ token_id: tokenId });
       if (typeof transaction.result === "string") {
-        return transaction.result;
+        return ipfsToHttp(transaction.result);
       }
       return null;
     },
     enabled: !!collectionAddress,
-    staleTime: Infinity, // Token URI should never change
-    gcTime: 1000 * 60 * 60, // Keep in memory for 1 hour
+    // staleTime: Infinity, // Token URI should never change
+    // gcTime: 1000 * 60 * 60, // Keep in memory for 1 hour
   });

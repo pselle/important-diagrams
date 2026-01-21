@@ -28,6 +28,8 @@ lerna-debug.log*
 .env
 .env.*
 !.env.example
+!.env.staging
+!.env.production
 
 # easy way to create temporary local-only files and folders
 *.local.*
@@ -43,3 +45,5 @@ packages/*
 # generated contract client imports
 src/contracts/*
 !src/contracts/util.ts
+.vercel
+.env*.local

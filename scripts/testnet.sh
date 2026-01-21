@@ -26,4 +26,17 @@ awk -v id="$contract_id" '
 echo "Updated environments.toml with new gallery contract ID."
 
 # Deploy the Squares NFT collection
-stellar contract invoke --id $contract_id  --source testnet-user -- deploy_collection --base_uri "ipfs://bafybeicqgwje7trm27thcwngfhtz2ppadly2zcnxp3ch6plt5fe4ipoacu/" --name "Stellar Squares" --symbol "SSQ" --collection_size 20
+collection_id=$(stellar contract invoke --id $contract_id  --source testnet-user -- deploy_collection --base_uri "ipfs://bafybeicqgwje7trm27thcwngfhtz2ppadly2zcnxp3ch6plt5fe4ipoacu/" --name "Stellar Squares" --symbol "SSQ" --collection_size 20)
+
+# Update environments.toml to point to that collection for the nft example contract
+awk -v hash="$collection_id" '
+  BEGIN { in_staging=0 }
+  /^\[staging\.contracts\]/ { in_staging=1 }
+  /^\[/ && $0 !~ /^\[staging\.contracts\]/ { in_staging=0 }
+  in_staging && /^nft_sequential_minting_example = { id = / {
+    print "nft_sequential_minting_example = { id = \"" hash "\" }"
+    next
+  }
+  { print }
+' environments.toml > environments.toml.tmp && mv environments.toml.tmp environments.toml
+echo "Updated environments.toml with new NFT collection contract ID."
