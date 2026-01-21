@@ -34,7 +34,7 @@ const ArtCard: React.FC<{ tokenId: number }> = ({ tokenId }) => {
         alt={`art piece #${tokenId}`}
       />
       <div className={styles.artCardInfo}>
-        <p>Owned by {displayOwner ?? "Loading..."}</p>
+        <p>Owned by {displayOwner ?? "(Error loading owner)"}</p>
         {!isLoadingTokenUri && tokenURI && (
           <p className={styles.tokenUri}>
             <a href={tokenURI} target="_blank" rel="noopener noreferrer">
