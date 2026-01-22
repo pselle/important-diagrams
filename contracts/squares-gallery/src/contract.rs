@@ -17,15 +17,14 @@ pub enum Error {
     InvalidWithdrawalAmount = 6,
 }
 
-type CollectionSymbol = String;
 
 #[contracttype]
 pub enum DataKey {
     Owner,
     NftWasmHash,
     XlmSac,
-    CollectionAddress(CollectionSymbol), // Keyed by collection symbol, which is stored as a String on the NFT contract standard
-    ItemPrice(CollectionSymbol),         // Initial price of items in the collection
+    CollectionAddress(String), // Keyed by collection symbol, which is stored as a String on the NFT contract standard
+    ItemPrice(String),         // Initial price of items in the collection, keyed by symbol
 }
 
 #[contract]
