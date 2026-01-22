@@ -25,6 +25,7 @@ fn test_deploy_collection() {
         &String::from_str(&env, "Squares Gallery"),
         &String::from_str(&env, "SQG"),
         &20u32,
+        &100, // item price
     );
     assert!(nft_address.exists());
     // Test collection_address getter
@@ -44,6 +45,7 @@ fn test_deploy_collection() {
         &String::from_str(&env, "Squares Gallery 2"),
         &String::from_str(&env, "SQG2"),
         &10u32,
+        &200, // item price
     );
     assert!(nft_address_2.exists());
     assert!(nft_address != nft_address_2);
@@ -86,6 +88,7 @@ fn test_purchase_nft() {
         &String::from_str(&env, "Squares Gallery"),
         &String::from_str(&env, "SQG"),
         &5u32,
+        &100, // item price
     );
     let nft_client = NftClient::new(&env, &nft_address);
     // The gallery owns token_id 2 initially

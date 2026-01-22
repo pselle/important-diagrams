@@ -16,12 +16,15 @@ pub enum Error {
     TokenNotOwnedByGallery = 5,
 }
 
+type CollectionSymbol = String;
+
 #[contracttype]
 pub enum DataKey {
     Owner,
     NftWasmHash,
     XlmSac,
-    CollectionAddress(String), // Keyed by collection symbol, which is stored as a String on the NFT contract standard
+    CollectionAddress(CollectionSymbol), // Keyed by collection symbol, which is stored as a String on the NFT contract standard
+    ItemPrice(CollectionSymbol),         // Initial price of items in the collection
 }
 
 #[contract]
@@ -56,6 +59,7 @@ impl Contract {
         name: String,
         symbol: String,
         collection_size: u32,
+        item_price: i128,
     ) -> Address {
         let owner: Address = e
             .storage()
@@ -104,6 +108,8 @@ impl Contract {
                 Err(_) => panic_with_error!(e, Error::MintingFailed),
             }
         }
+        // Store the item price for this collection
+        e.storage().instance().set(&DataKey::ItemPrice(symbol.clone()), &item_price);
         collection_address
     }
 
@@ -115,7 +121,7 @@ impl Contract {
         let collection_address: Address = e
             .storage()
             .instance()
-            .get(&DataKey::CollectionAddress(symbol))
+            .get(&DataKey::CollectionAddress(symbol.clone()))
             .expect("collection_address not present for symbol");
         let client = NftClient::new(e, &collection_address);
 
@@ -125,9 +131,15 @@ impl Contract {
             panic_with_error!(e, Error::TokenNotOwnedByGallery);
         }
 
-        // Purchaser transfers 100 XLM to gallery for the purchase
+        // Purchaser transfers the item price in XLM to gallery for the purchase
+        let item_price: i128 = e
+            .storage()
+            .instance()
+            .get(&DataKey::ItemPrice(symbol.clone()))
+            .expect("item_price not present for symbol");
+
         let _ = Self::xlm_client(e)
-            .try_transfer(&buyer, &gallery_address, &100i128)
+            .try_transfer(&buyer, &gallery_address, &item_price)
             .unwrap_or_else(|_| panic_with_error!(e, Error::XLMTransferFailed));
 
         // Transfer the NFT from gallery to buyer
@@ -140,7 +152,7 @@ impl Contract {
             .instance()
             .get(&DataKey::Owner)
             .expect("owner should be set");
-        // Only admins can request withdrawls
+        // Only owner can request withdrawals
         owner.require_auth();
 
         let gallery_address = e.current_contract_address();
