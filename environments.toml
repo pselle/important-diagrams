@@ -28,8 +28,8 @@ name = "testnet-user"
 default = true
 
 [staging.contracts]
-nft_sequential_minting_example = { id = "CDLY7I2IJDBHPUQF6CRGWMMXVS25G37ZAKAN5BTILFK5D3PZB2WOHKUJ" }
-squares_gallery = { id = "CAHMRA7AFSVZAA3VRXZ75UZOZFB4BOSEZS4NJKGZSXAAZ4U4LTDDIJTI" }
+nft_sequential_minting_example = { id = ""CAWIVD4O5H3B3KN3FOW2GKGOV3RXCER34HP7KGQSNPOQEPZX7XFEPIMX"" }
+squares_gallery = { id = "CDJOJWU6DJUV6EX2E7OB43YY67AIJEBDYNSS5PUYLWSTKOMKRNSAJWOC" }
 
 ### Production environment configuration
 [production.network]
